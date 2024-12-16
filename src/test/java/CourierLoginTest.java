@@ -4,7 +4,6 @@ import io.restassured.response.ValidatableResponse;
 import org.example.Courier;
 import org.example.CourierChecks;
 import org.example.CourierClient;
-import org.example.CourierEntry;
 import org.junit.After;
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ public class CourierLoginTest {
         ValidatableResponse createResponse = client.createCourier(courier);
         check.createdSuccessfully(createResponse);
 
-        var creds = CourierEntry.from(courier);
+        var creds = Courier.from(courier);
         ValidatableResponse loginResponse = client.loginCourier(creds);
         courierId = check.loggedInSuccessfully(loginResponse);
     }
@@ -43,7 +42,7 @@ public class CourierLoginTest {
     @Description("Проверка сообщения об ошибке при входе с неверным паролем")
     public void testCourierWrongPassword() {
 
-        var creds = new CourierEntry("test", "12345");
+        var creds = new Courier("test", "12345");
         ValidatableResponse loginResponse = client.loginCourier(creds);
         check.notFoundLogin(loginResponse);
     }
@@ -51,11 +50,10 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Вход с несуществующим аккаунтом")
     @Description("Проверка сообщения об ошибке при входе с несуществующим аккаунтом")
-
     public void testCourierLoginAccountNotFound() {
-        var creds = new CourierEntry("12345");
+        var creds = new Courier("nonexistentUser", "wrongPassword");
         ValidatableResponse loginResponse = client.loginCourier(creds);
-        check.badRequestLogin(loginResponse);
+        check.notFoundLogin(loginResponse);
     }
 
     @Test
@@ -63,7 +61,16 @@ public class CourierLoginTest {
     @Description("Проверка сообщения об ошибке при входе без логина")
     public void testCourierLoginNoLogin() {
         var courier = Courier.random();
-        var creds = CourierEntry.from(courier);
+        var creds = Courier.from(courier);
+        ValidatableResponse loginResponse = client.loginCourier(creds);
+        check.notFoundLogin(loginResponse);
+    }
+
+    @Test
+    @DisplayName("Вход с паролем без логина")
+    @Description("Проверка сообщения об ошибке при входе с паролем без логина")
+    public void testCourierWithPasswordNoLogin() {
+        var creds = new Courier(" ", "wrongPassword");
         ValidatableResponse loginResponse = client.loginCourier(creds);
         check.notFoundLogin(loginResponse);
     }

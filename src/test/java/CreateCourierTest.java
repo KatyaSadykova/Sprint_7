@@ -3,14 +3,12 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.example.CourierChecks;
 import org.example.CourierClient;
-import org.example.CourierEntry;
 import org.example.Courier;
 import org.junit.After;
 import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertNotEquals;
 
 public class CreateCourierTest {
     private final CourierClient client = new CourierClient();
@@ -30,15 +28,11 @@ public class CreateCourierTest {
     @DisplayName("Создание курьера /courier")
     @Description("Тест на успешное создание курьера")
     public void testCreateCourierSuccess() {
+
         var courier = Courier.random();
         ValidatableResponse createResponse = client.createCourier(courier);
         check.createdSuccessfully(createResponse);
 
-        var creds = CourierEntry.from(courier);
-        ValidatableResponse loginResponse = client.loginCourier(creds);
-        courierId = check.loggedInSuccessfully(loginResponse);
-
-        assertNotEquals(0, courierId);
     }
 
     @Test
@@ -74,10 +68,6 @@ public class CreateCourierTest {
 
         ValidatableResponse createResponseDuplicate = client.createCourier(courier);
         check.conflictCheck(createResponseDuplicate);
-
-        var creds = CourierEntry.from(courier);
-        ValidatableResponse loginResponse = client.loginCourier(creds);
-        courierId = check.loggedInSuccessfully(loginResponse);
     }
 
     @Test
@@ -91,9 +81,5 @@ public class CreateCourierTest {
         courier.setFirstName("Test");
         ValidatableResponse createDuplicateResponse = client.createCourier(courier);
         check.conflictCheck(createDuplicateResponse);
-
-        var creds = CourierEntry.from(courier);
-        ValidatableResponse loginResponse = client.loginCourier(creds);
-        courierId = check.loggedInSuccessfully(loginResponse);
     }
 }

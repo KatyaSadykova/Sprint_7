@@ -7,14 +7,44 @@ public class Courier {
     private String password;
     private String firstName;
 
+    // Конструктор для логина, пароля и имени
+    public Courier(String login, String password, String firstName) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+    }
+
+    // Конструктор для логина и пароля
+    public Courier(String login, String password) {
+        this(login, password, null); // Используйте конструктор выше
+    }
+
+    // Конструктор для логина
+    public Courier(String login) {
+        this(login, "defaultPassword", null);
+    }
+
+    // Пустой конструктор
+    public Courier() {
+    }
+
+    // Фабричный метод для создания объекта на основе входных данных
+    public static Courier from(Courier requestBody) {
+        return new Courier(requestBody.getLogin(), requestBody.getPassword(), requestBody.getFirstName());
+    }
+
+    // Генерация стандартного курьера
     public static Courier generic() {
-        return new Courier("test", "1234", "tests");
+        return new Courier("test", "1234");
     }
 
+    // Генерация случайного курьера
     public static Courier random() {
-        return new Courier("test" + new Random().nextInt(1000), "1234", "tests");
+        Random random = new Random();
+        return new Courier("test" + random.nextInt(1000), "pass" + random.nextInt(1000));
     }
 
+    // Геттеры и сеттеры
     public String getLogin() {
         return login;
     }
@@ -37,14 +67,5 @@ public class Courier {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public Courier(String login, String password, String firstName) {
-        this.login = login;
-        this.password = password;
-        this.firstName = firstName;
-    }
-
-    public Courier() {
     }
 }

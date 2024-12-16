@@ -5,7 +5,6 @@ import io.restassured.response.ValidatableResponse;
 import org.example.Courier;
 import org.example.CourierChecks;
 import org.example.CourierClient;
-import org.example.CourierEntry;
 import org.example.OrderClient;
 import org.junit.After;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class GetOrdersTest {
         ValidatableResponse createResponse = client.createCourier(courier);
         check.createdSuccessfully(createResponse);
 
-        var creds = CourierEntry.from(courier);
+        var creds = Courier.from(courier);
         ValidatableResponse loginResponse = client.loginCourier(creds);
         check.loggedInSuccessfully(loginResponse);
         courierId = check.loggedInSuccessfully(loginResponse);
@@ -75,7 +74,7 @@ public class GetOrdersTest {
         ValidatableResponse createResponse = client.createCourier(courier);
         check.createdSuccessfully(createResponse);
 
-        var creds = CourierEntry.from(courier);
+        var creds = Courier.from(courier);
         ValidatableResponse loginResponse = client.loginCourier(creds);
         check.loggedInSuccessfully(loginResponse);
         courierId = check.loggedInSuccessfully(loginResponse);

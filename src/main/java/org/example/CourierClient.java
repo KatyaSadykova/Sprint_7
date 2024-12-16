@@ -9,7 +9,7 @@ import java.util.Map;
 public class CourierClient {
 
     @Step("Вход курьера")
-    public ValidatableResponse loginCourier(CourierEntry creds) {
+    public ValidatableResponse loginCourier(Courier creds) {
         return Client.getRequestSpecification()
                 .body(creds)
                 .when().log().all()
